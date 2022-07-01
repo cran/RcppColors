@@ -1,0 +1,16 @@
+e34f12b7e6858e844b4e957407949958 *DESCRIPTION
+b513ca4328be1c17db32a450bf03ec74 *NAMESPACE
+04fb43fc19a613b157ff4d24623f6be3 *NEWS.md
+4c1a1da2a5c9696bb76549cdd8021399 *R/RcppExports.R
+4b0bd778bc892b2f8918567f4aa820e2 *R/colorMaps.R
+431f4c0d4e0b34fca69868c96efd9037 *R/hsluv.R
+95fb2aa580048b2da0f61b216035ede2 *README.md
+2dd220c9a754a44ea79b97bf8b887fa5 *inst/include/RcppColors.h
+c956e40c9bb4a344809b058e7600c482 *man/RcppColors-package.Rd
+4cc78c05bb65646276e62e05eab0c46d *man/colorMaps.Rd
+9e54d5019b7389eb001c59fdaf9b28f6 *man/figures/ModularForm.png
+848a614b97994d7419e3b5795844499f *man/hsluv.Rd
+e1f0f68b4dea3650ea5c96c6b4ee858d *src/Makevars
+e1f0f68b4dea3650ea5c96c6b4ee858d *src/Makevars.win
+e828d96e164830108d1318d2a90b33a9 *src/RcppColors.cpp
+75fd263512542f482784314b460e4bb4 *src/RcppExports.cpp
