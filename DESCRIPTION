@@ -1,7 +1,7 @@
 Type: Package
 Package: RcppColors
 Title: 'C++' Header Files for Color Conversion and Color Mappings
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Stéphane", "Laurent", , "laurent_step@outlook.fr", role = c("cre", "aut")),
     person("Scott", "Spencer", role = "aut")
@@ -18,10 +18,10 @@ BugReports: https://github.com/stla/RcppColors/issues
 Imports: Rcpp (>= 1.0.8)
 LinkingTo: Rcpp
 Encoding: UTF-8
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 NeedsCompilation: yes
-Packaged: 2022-06-30 07:46:03 UTC; SDL96354
+Packaged: 2022-08-20 07:32:27 UTC; stla
 Author: Stéphane Laurent [cre, aut],
   Scott Spencer [aut]
 Repository: CRAN
-Date/Publication: 2022-07-01 16:10:05 UTC
+Date/Publication: 2022-08-20 07:50:02 UTC
