@@ -52,8 +52,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // ColorMap1
-Rcpp::CharacterMatrix ColorMap1(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revr, bool revg, bool revb);
-RcppExport SEXP _RcppColors_ColorMap1(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revrSEXP, SEXP revgSEXP, SEXP revbSEXP) {
+Rcpp::CharacterMatrix ColorMap1(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revr, bool revg, bool revb, const unsigned int nthreads);
+RcppExport SEXP _RcppColors_ColorMap1(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revrSEXP, SEXP revgSEXP, SEXP revbSEXP, SEXP nthreadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -63,13 +63,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type revr(revrSEXP);
     Rcpp::traits::input_parameter< bool >::type revg(revgSEXP);
     Rcpp::traits::input_parameter< bool >::type revb(revbSEXP);
-    rcpp_result_gen = Rcpp::wrap(ColorMap1(Z, bkgcolor, nancolor, revr, revg, revb));
+    Rcpp::traits::input_parameter< const unsigned int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ColorMap1(Z, bkgcolor, nancolor, revr, revg, revb, nthreads));
     return rcpp_result_gen;
 END_RCPP
 }
 // ColorMap2
-Rcpp::CharacterMatrix ColorMap2(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revh, bool revs, bool revl);
-RcppExport SEXP _RcppColors_ColorMap2(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revhSEXP, SEXP revsSEXP, SEXP revlSEXP) {
+Rcpp::CharacterMatrix ColorMap2(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revh, bool revs, bool revl, const unsigned int nthreads);
+RcppExport SEXP _RcppColors_ColorMap2(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revhSEXP, SEXP revsSEXP, SEXP revlSEXP, SEXP nthreadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -79,7 +80,24 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type revh(revhSEXP);
     Rcpp::traits::input_parameter< bool >::type revs(revsSEXP);
     Rcpp::traits::input_parameter< bool >::type revl(revlSEXP);
-    rcpp_result_gen = Rcpp::wrap(ColorMap2(Z, bkgcolor, nancolor, revh, revs, revl));
+    Rcpp::traits::input_parameter< const unsigned int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ColorMap2(Z, bkgcolor, nancolor, revh, revs, revl, nthreads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ColorMap3
+Rcpp::CharacterMatrix ColorMap3(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, double s, double r, const unsigned int nthreads);
+RcppExport SEXP _RcppColors_ColorMap3(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP sSEXP, SEXP rSEXP, SEXP nthreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::ComplexMatrix >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< std::string >::type bkgcolor(bkgcolorSEXP);
+    Rcpp::traits::input_parameter< std::string >::type nancolor(nancolorSEXP);
+    Rcpp::traits::input_parameter< double >::type s(sSEXP);
+    Rcpp::traits::input_parameter< double >::type r(rSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ColorMap3(Z, bkgcolor, nancolor, s, r, nthreads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -88,8 +106,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RcppColors_hsluv2rgb_cpp", (DL_FUNC) &_RcppColors_hsluv2rgb_cpp, 3},
     {"_RcppColors_hsluv_cpp", (DL_FUNC) &_RcppColors_hsluv_cpp, 3},
     {"_RcppColors_hsluv_alpha_cpp", (DL_FUNC) &_RcppColors_hsluv_alpha_cpp, 4},
-    {"_RcppColors_ColorMap1", (DL_FUNC) &_RcppColors_ColorMap1, 6},
-    {"_RcppColors_ColorMap2", (DL_FUNC) &_RcppColors_ColorMap2, 6},
+    {"_RcppColors_ColorMap1", (DL_FUNC) &_RcppColors_ColorMap1, 7},
+    {"_RcppColors_ColorMap2", (DL_FUNC) &_RcppColors_ColorMap2, 7},
+    {"_RcppColors_ColorMap3", (DL_FUNC) &_RcppColors_ColorMap3, 6},
     {NULL, NULL, 0}
 };
 
