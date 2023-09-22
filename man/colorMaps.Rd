@@ -5,6 +5,16 @@
 \alias{colorMap2}
 \alias{colorMap3}
 \alias{colorMap4}
+\alias{colorMap5}
+\alias{colorMap6}
+\alias{colorMap7}
+\alias{colorMap8}
+\alias{colorMap9}
+\alias{colorMap10}
+\alias{colorMap11}
+\alias{colorMap12}
+\alias{colorMap13}
+\alias{colorMap14}
 \title{Color mappings functions}
 \usage{
 colorMap1(
@@ -39,6 +49,86 @@ colorMap4(
   reverse = c(FALSE, FALSE, FALSE),
   nthreads = 1L
 )
+
+colorMap5(
+  Z,
+  bkgcolor = "#15191e",
+  nancolor = "#000000",
+  reverse = c(FALSE, FALSE, FALSE),
+  nthreads = 1L
+)
+
+colorMap6(
+  Z,
+  bkgcolor = "#15191e",
+  nancolor = "#000000",
+  reverse = c(FALSE, FALSE, FALSE),
+  nthreads = 1L
+)
+
+colorMap7(
+  Z,
+  bkgcolor = "#15191e",
+  nancolor = "#000000",
+  reverse = c(FALSE, FALSE, FALSE),
+  nthreads = 1L
+)
+
+colorMap8(
+  Z,
+  bkgcolor = "#15191e",
+  nancolor = "#000000",
+  reverse = c(FALSE, FALSE, FALSE),
+  nthreads = 1L
+)
+
+colorMap9(
+  Z,
+  bkgcolor = "#15191e",
+  nancolor = "#000000",
+  reverse = c(FALSE, FALSE, FALSE),
+  nthreads = 1L
+)
+
+colorMap10(
+  Z,
+  bkgcolor = "#15191e",
+  nancolor = "#000000",
+  reverse = c(FALSE, FALSE, FALSE),
+  nthreads = 1L
+)
+
+colorMap11(
+  Z,
+  bkgcolor = "#15191e",
+  nancolor = "#000000",
+  reverse = c(FALSE, FALSE, FALSE),
+  nthreads = 1L
+)
+
+colorMap12(
+  Z,
+  bkgcolor = "#15191e",
+  nancolor = "#000000",
+  reverse = c(FALSE, FALSE, FALSE),
+  nthreads = 1L
+)
+
+colorMap13(
+  Z,
+  bkgcolor = "#15191e",
+  nancolor = "#000000",
+  reverse = c(FALSE, FALSE, FALSE),
+  nthreads = 1L
+)
+
+colorMap14(
+  Z,
+  bkgcolor = "#15191e",
+  nancolor = "#000000",
+  reverse = c(FALSE, FALSE, FALSE),
+  nthreads = 1L
+)
 }
 \arguments{
 \item{Z}{complex number, vector or matrix}
@@ -49,7 +139,7 @@ of \code{Z}}
 \item{nancolor}{color for infinite and \code{NaN} values}
 
 \item{reverse}{logical vector of length three; for each component of the
-color space (R, G, B or H, S, L), whether to reverse it (e.g. 
+color space (e.g. R, G, B or H, S, L), whether to reverse it (e.g. 
 \code{R -> 255-R})}
 
 \item{nthreads}{number of threads used for parallel computation}

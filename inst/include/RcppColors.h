@@ -225,10 +225,100 @@ static double modulo(double a, double p) {
 static double f(double x, double h, double s, double v) {
   double k = modulo(x + h / 60.0, 6.0);
   double mm = std::max(0.0, std::min(k, std::min(4.0 - k, 1.0)));
-  v /= v / 100.0;
-  s /= s / 100.0;
+  v /= 100.0;
+  s /= 100.0;
   return 255.0 * (v - v * s * mm);
 }
+
+static std::array<int, 3> _hsl2rgb_(double h, double s, double l) {
+  if(h < 0.0 || h > 360.0) {
+    Rcpp::stop("Invalid value of `h`.");
+  }
+  if(s < 0.0 || s > 100.0) {
+    Rcpp::stop("Invalid value of `s`.");
+  }
+  if(l < 0.0 || l > 100.0) {
+    Rcpp::stop("Invalid value of `l`.");
+  }
+  s /= 100.0;
+  l /= 100.0;
+  std::array<int, 3> out;
+  double chroma = s * (1.0 - fabs(2.0*l - 1.0));
+  double hprime = h / 60.0;
+  double x = chroma * (1.0 - fabs(modulo(hprime, 2.0) - 1.0));
+  double r, g, b;
+  if(hprime <= 1) {
+    r = chroma;
+    g = x;
+    b = 0.0;
+  } else if(hprime <= 2) {
+    r = x;
+    g = chroma;
+    b = 0.0;
+  } else if(hprime <= 3) {
+    r = 0.0;
+    g = chroma;
+    b = x;
+  } else if(hprime <= 4) {
+    r = 0.0;
+    g = x;
+    b = chroma;
+  } else if(hprime <= 5) {
+    r = x;
+    g = 0.0;
+    b = chroma;
+  } else {
+    r = chroma;
+    g = 0.0;
+    b = x;
+  }
+  double m = l - chroma / 2.0;
+  r += m;
+  g += m;
+  b += m;
+  out[0] = (int)round(255.0 * r);
+  out[1] = (int)round(255.0 * g);
+  out[2] = (int)round(255.0 * b);
+  return out;
+}
+
+
+static std::array<int, 3> _hsi2rgb_(double h, double s, double i) {
+  if(h < 0.0 || h > 360.0) {
+    Rcpp::stop("Invalid value of `h`.");
+  }
+  if(s < 0.0 || s > 100.0) {
+    Rcpp::stop("Invalid value of `s`.");
+  }
+  if(i < 0.0 || i > 100.0) {
+    Rcpp::stop("Invalid value of `i`.");
+  }
+  std::array<int, 3> out;
+  double r, g, b;
+  i = i / 100;
+  double is = i*s / 100;
+  double second = i - is;
+  h = ratio_pi_180 * h;
+  const double PIover3 = M_PI / 3;
+  if(h < 2*PIover3) {
+    r = i + is * cos(h) / cos(PIover3 - h);
+    b = second;
+    g = i + 2*is + b - r; 
+  } else if(h < 4*PIover3) {
+    g = i + is * cos(h - 2*PIover3) / cos(M_PI + h);
+    r = second;
+    b = i + 2*is + r - g;
+  } else {
+    b = i + is * cos(h - 4*PIover3) / cos(5*PIover3 - h);
+    g = second;
+    r = i + 2*is + g - b;
+  }
+  out[0] = (int)round(85.0 * r);
+  out[1] = (int)round(85.0 * g);
+  out[2] = (int)round(85.0 * b);
+  return out;
+}
+
 
 namespace RcppColors {
 
@@ -253,6 +343,7 @@ namespace RcppColors {
     return rgb2hex(r, g, b) + ahex;
   }
 
+
   static inline std::string hsluv2hex(double h, double s, double l) {
     return _hsluv2hex_(h, s, l);
   }
@@ -264,6 +355,7 @@ namespace RcppColors {
     const std::string alphahex = opacity(alpha);
     return _hsluv2hex_(h, s, l) + alphahex;
   }
+
 
   static inline std::string hsv2hex(double h, double s, double v) {
     if(h < 0.0 || h > 360.0) {
@@ -287,6 +379,34 @@ namespace RcppColors {
                                     double alpha) {
     const std::string alphahex = opacity(alpha);
     return hsv2hex(h, s, v) + alphahex;
+  }
+
+
+  static inline std::string hsl2hex(double h, double s, double l) {
+    std::array<int, 3> rgb = _hsl2rgb_(h, s, l);
+    return rgb_to_hex(rgb[0], rgb[1], rgb[2]); 
+  }
+  
+  static inline std::string hsl2hex(double h, 
+                                    double s, 
+                                    double l, 
+                                    double alpha) {
+    const std::string alphahex = opacity(alpha);
+    return hsl2hex(h, s, l) + alphahex; 
+  }
+
+
+  static inline std::string hsi2hex(double h, double s, double i) {
+    std::array<int, 3> rgb = _hsi2rgb_(h, s, i);
+    return rgb_to_hex(rgb[0], rgb[1], rgb[2]); 
+  }
+
+  static inline std::string hsi2hex(double h, 
+                                    double s, 
+                                    double i, 
+                                    double alpha) {
+    const std::string alphahex = opacity(alpha);
+    return hsi2hex(h, s, i) + alphahex; 
   }
 
 }  // namespace RcppColors

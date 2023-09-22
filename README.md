@@ -4,7 +4,7 @@
 [![R-CMD-check](https://github.com/stla/RcppColors/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stla/RcppColors/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-Six C++ functions are exposed by this package:
+Ten C++ functions are exposed by this package:
 
 ```cpp
 std::string rgb2hex(double r, double g, double b);
@@ -13,13 +13,17 @@ std::string hsluv2hex(double h, double s, double l);
 std::string hsluv2hex(double h, double s, double l, double alpha);
 std::string hsv2hex(double h, double s, double v);
 std::string hsv2hex(double h, double s, double v, double alpha);
+std::string hsl2hex(double h, double s, double l);
+std::string hsl2hex(double h, double s, double l, double alpha);
+std::string hsi2hex(double h, double s, double i);
+std::string hsi2hex(double h, double s, double i, double alpha);
 ```
 
 ```
 r, g, b ∈ [0, 255] (red, green, blue)
 a, alpha ∈ [0, 1] (opacity)
 h ∈ [0, 360] (hue)
-s,l,v ∈ [0, 100] (saturation, lightness, value)
+s,l,v,i ∈ [0, 100] (saturation, lightness, value, intensity)
 ```
 
 ## Usage in a package with **Rcpp**
@@ -41,6 +45,8 @@ std::string mycolor = RcppColors::rgb2hex(0.0, 128.0, 255.0);
 ```
 
 ## Color maps
+
+Fourteen color maps are available in R.
 
 ```r
 library(RcppColors)
@@ -300,8 +306,39 @@ par(opar)
 
 ![](https://raw.githubusercontent.com/stla/RcppColors/main/inst/images/KleinFibonacciDedekind.png)
 
+```r
+library(RcppColors)
+library(jacobi)
+
+f <- Vectorize(function(z){
+  wsigma(z, omega = c(1, 0.25 + 1i))
+})
+
+x <- y <- seq(-5, 5, length.out = 512)
+Z <- outer(y, x, function(x, y){
+  f(complex(real = x, imaginary = y)) 
+})
+
+image <- colorMap5(Z, bkgcolor = "#002240")
+
+opar <- par(mar = c(0,0,0,0), bg = "#002240")
+plot(
+  c(-100, 100), c(-100, 100), type = "n", xaxs="i", yaxs="i", 
+  xlab = NA, ylab = NA, axes = FALSE, asp = 1
+)
+rasterImage(image, -100, -100, 100, 100)
+par(opar)
+```
+
+![](https://raw.githubusercontent.com/stla/RcppColors/main/inst/images/wsigma_cm5.png)
+
 ___
 
+![](https://raw.githubusercontent.com/stla/RcppColors/main/inst/images/KleinFibo_5-6-7-9.png)
+
+![](https://raw.githubusercontent.com/stla/RcppColors/main/inst/images/KleinRt5_smooth.gif)
+
+![](https://raw.githubusercontent.com/stla/RcppColors/main/inst/images/KleinDedekind.png)
 
 ![](https://raw.githubusercontent.com/stla/RcppColors/main/inst/images/kaleidoscope.png)
 

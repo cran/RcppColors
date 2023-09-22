@@ -51,6 +51,33 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// hsl_cpp
+std::string hsl_cpp(double h, double s, double l);
+RcppExport SEXP _RcppColors_hsl_cpp(SEXP hSEXP, SEXP sSEXP, SEXP lSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type s(sSEXP);
+    Rcpp::traits::input_parameter< double >::type l(lSEXP);
+    rcpp_result_gen = Rcpp::wrap(hsl_cpp(h, s, l));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hsl_alpha_cpp
+std::string hsl_alpha_cpp(double h, double s, double l, double alpha);
+RcppExport SEXP _RcppColors_hsl_alpha_cpp(SEXP hSEXP, SEXP sSEXP, SEXP lSEXP, SEXP alphaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< double >::type s(sSEXP);
+    Rcpp::traits::input_parameter< double >::type l(lSEXP);
+    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
+    rcpp_result_gen = Rcpp::wrap(hsl_alpha_cpp(h, s, l, alpha));
+    return rcpp_result_gen;
+END_RCPP
+}
 // ColorMap1
 Rcpp::CharacterMatrix ColorMap1(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revr, bool revg, bool revb, const unsigned int nthreads);
 RcppExport SEXP _RcppColors_ColorMap1(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revrSEXP, SEXP revgSEXP, SEXP revbSEXP, SEXP nthreadsSEXP) {
@@ -118,15 +145,197 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ColorMap5
+Rcpp::CharacterMatrix ColorMap5(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revh, bool revs, bool revi, const unsigned int nthreads);
+RcppExport SEXP _RcppColors_ColorMap5(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revhSEXP, SEXP revsSEXP, SEXP reviSEXP, SEXP nthreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::ComplexMatrix >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< std::string >::type bkgcolor(bkgcolorSEXP);
+    Rcpp::traits::input_parameter< std::string >::type nancolor(nancolorSEXP);
+    Rcpp::traits::input_parameter< bool >::type revh(revhSEXP);
+    Rcpp::traits::input_parameter< bool >::type revs(revsSEXP);
+    Rcpp::traits::input_parameter< bool >::type revi(reviSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ColorMap5(Z, bkgcolor, nancolor, revh, revs, revi, nthreads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ColorMap6
+Rcpp::CharacterMatrix ColorMap6(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revh, bool revs, bool revl, const unsigned int nthreads);
+RcppExport SEXP _RcppColors_ColorMap6(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revhSEXP, SEXP revsSEXP, SEXP revlSEXP, SEXP nthreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::ComplexMatrix >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< std::string >::type bkgcolor(bkgcolorSEXP);
+    Rcpp::traits::input_parameter< std::string >::type nancolor(nancolorSEXP);
+    Rcpp::traits::input_parameter< bool >::type revh(revhSEXP);
+    Rcpp::traits::input_parameter< bool >::type revs(revsSEXP);
+    Rcpp::traits::input_parameter< bool >::type revl(revlSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ColorMap6(Z, bkgcolor, nancolor, revh, revs, revl, nthreads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ColorMap7
+Rcpp::CharacterMatrix ColorMap7(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revh, bool revs, bool revv, const unsigned int nthreads);
+RcppExport SEXP _RcppColors_ColorMap7(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revhSEXP, SEXP revsSEXP, SEXP revvSEXP, SEXP nthreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::ComplexMatrix >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< std::string >::type bkgcolor(bkgcolorSEXP);
+    Rcpp::traits::input_parameter< std::string >::type nancolor(nancolorSEXP);
+    Rcpp::traits::input_parameter< bool >::type revh(revhSEXP);
+    Rcpp::traits::input_parameter< bool >::type revs(revsSEXP);
+    Rcpp::traits::input_parameter< bool >::type revv(revvSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ColorMap7(Z, bkgcolor, nancolor, revh, revs, revv, nthreads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ColorMap8
+Rcpp::CharacterMatrix ColorMap8(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revh, bool revs, bool revi, const unsigned int nthreads);
+RcppExport SEXP _RcppColors_ColorMap8(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revhSEXP, SEXP revsSEXP, SEXP reviSEXP, SEXP nthreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::ComplexMatrix >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< std::string >::type bkgcolor(bkgcolorSEXP);
+    Rcpp::traits::input_parameter< std::string >::type nancolor(nancolorSEXP);
+    Rcpp::traits::input_parameter< bool >::type revh(revhSEXP);
+    Rcpp::traits::input_parameter< bool >::type revs(revsSEXP);
+    Rcpp::traits::input_parameter< bool >::type revi(reviSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ColorMap8(Z, bkgcolor, nancolor, revh, revs, revi, nthreads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ColorMap9
+Rcpp::CharacterMatrix ColorMap9(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revh, bool revs, bool revl, const unsigned int nthreads);
+RcppExport SEXP _RcppColors_ColorMap9(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revhSEXP, SEXP revsSEXP, SEXP revlSEXP, SEXP nthreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::ComplexMatrix >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< std::string >::type bkgcolor(bkgcolorSEXP);
+    Rcpp::traits::input_parameter< std::string >::type nancolor(nancolorSEXP);
+    Rcpp::traits::input_parameter< bool >::type revh(revhSEXP);
+    Rcpp::traits::input_parameter< bool >::type revs(revsSEXP);
+    Rcpp::traits::input_parameter< bool >::type revl(revlSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ColorMap9(Z, bkgcolor, nancolor, revh, revs, revl, nthreads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ColorMap10
+Rcpp::CharacterMatrix ColorMap10(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revh, bool revs, bool revv, const unsigned int nthreads);
+RcppExport SEXP _RcppColors_ColorMap10(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revhSEXP, SEXP revsSEXP, SEXP revvSEXP, SEXP nthreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::ComplexMatrix >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< std::string >::type bkgcolor(bkgcolorSEXP);
+    Rcpp::traits::input_parameter< std::string >::type nancolor(nancolorSEXP);
+    Rcpp::traits::input_parameter< bool >::type revh(revhSEXP);
+    Rcpp::traits::input_parameter< bool >::type revs(revsSEXP);
+    Rcpp::traits::input_parameter< bool >::type revv(revvSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ColorMap10(Z, bkgcolor, nancolor, revh, revs, revv, nthreads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ColorMap11
+Rcpp::CharacterMatrix ColorMap11(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revh, bool revs, bool revl, const unsigned int nthreads);
+RcppExport SEXP _RcppColors_ColorMap11(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revhSEXP, SEXP revsSEXP, SEXP revlSEXP, SEXP nthreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::ComplexMatrix >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< std::string >::type bkgcolor(bkgcolorSEXP);
+    Rcpp::traits::input_parameter< std::string >::type nancolor(nancolorSEXP);
+    Rcpp::traits::input_parameter< bool >::type revh(revhSEXP);
+    Rcpp::traits::input_parameter< bool >::type revs(revsSEXP);
+    Rcpp::traits::input_parameter< bool >::type revl(revlSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ColorMap11(Z, bkgcolor, nancolor, revh, revs, revl, nthreads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ColorMap12
+Rcpp::CharacterMatrix ColorMap12(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revh, bool revs, bool revi, const unsigned int nthreads);
+RcppExport SEXP _RcppColors_ColorMap12(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revhSEXP, SEXP revsSEXP, SEXP reviSEXP, SEXP nthreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::ComplexMatrix >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< std::string >::type bkgcolor(bkgcolorSEXP);
+    Rcpp::traits::input_parameter< std::string >::type nancolor(nancolorSEXP);
+    Rcpp::traits::input_parameter< bool >::type revh(revhSEXP);
+    Rcpp::traits::input_parameter< bool >::type revs(revsSEXP);
+    Rcpp::traits::input_parameter< bool >::type revi(reviSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ColorMap12(Z, bkgcolor, nancolor, revh, revs, revi, nthreads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ColorMap13
+Rcpp::CharacterMatrix ColorMap13(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revh, bool revs, bool revl, const unsigned int nthreads);
+RcppExport SEXP _RcppColors_ColorMap13(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revhSEXP, SEXP revsSEXP, SEXP revlSEXP, SEXP nthreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::ComplexMatrix >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< std::string >::type bkgcolor(bkgcolorSEXP);
+    Rcpp::traits::input_parameter< std::string >::type nancolor(nancolorSEXP);
+    Rcpp::traits::input_parameter< bool >::type revh(revhSEXP);
+    Rcpp::traits::input_parameter< bool >::type revs(revsSEXP);
+    Rcpp::traits::input_parameter< bool >::type revl(revlSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ColorMap13(Z, bkgcolor, nancolor, revh, revs, revl, nthreads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ColorMap14
+Rcpp::CharacterMatrix ColorMap14(Rcpp::ComplexMatrix Z, std::string bkgcolor, std::string nancolor, bool revh, bool revs, bool revv, const unsigned int nthreads);
+RcppExport SEXP _RcppColors_ColorMap14(SEXP ZSEXP, SEXP bkgcolorSEXP, SEXP nancolorSEXP, SEXP revhSEXP, SEXP revsSEXP, SEXP revvSEXP, SEXP nthreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::ComplexMatrix >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< std::string >::type bkgcolor(bkgcolorSEXP);
+    Rcpp::traits::input_parameter< std::string >::type nancolor(nancolorSEXP);
+    Rcpp::traits::input_parameter< bool >::type revh(revhSEXP);
+    Rcpp::traits::input_parameter< bool >::type revs(revsSEXP);
+    Rcpp::traits::input_parameter< bool >::type revv(revvSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nthreads(nthreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ColorMap14(Z, bkgcolor, nancolor, revh, revs, revv, nthreads));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_RcppColors_hsluv2rgb_cpp", (DL_FUNC) &_RcppColors_hsluv2rgb_cpp, 3},
     {"_RcppColors_hsluv_cpp", (DL_FUNC) &_RcppColors_hsluv_cpp, 3},
     {"_RcppColors_hsluv_alpha_cpp", (DL_FUNC) &_RcppColors_hsluv_alpha_cpp, 4},
+    {"_RcppColors_hsl_cpp", (DL_FUNC) &_RcppColors_hsl_cpp, 3},
+    {"_RcppColors_hsl_alpha_cpp", (DL_FUNC) &_RcppColors_hsl_alpha_cpp, 4},
     {"_RcppColors_ColorMap1", (DL_FUNC) &_RcppColors_ColorMap1, 7},
     {"_RcppColors_ColorMap2", (DL_FUNC) &_RcppColors_ColorMap2, 7},
     {"_RcppColors_ColorMap3", (DL_FUNC) &_RcppColors_ColorMap3, 6},
     {"_RcppColors_ColorMap4", (DL_FUNC) &_RcppColors_ColorMap4, 7},
+    {"_RcppColors_ColorMap5", (DL_FUNC) &_RcppColors_ColorMap5, 7},
+    {"_RcppColors_ColorMap6", (DL_FUNC) &_RcppColors_ColorMap6, 7},
+    {"_RcppColors_ColorMap7", (DL_FUNC) &_RcppColors_ColorMap7, 7},
+    {"_RcppColors_ColorMap8", (DL_FUNC) &_RcppColors_ColorMap8, 7},
+    {"_RcppColors_ColorMap9", (DL_FUNC) &_RcppColors_ColorMap9, 7},
+    {"_RcppColors_ColorMap10", (DL_FUNC) &_RcppColors_ColorMap10, 7},
+    {"_RcppColors_ColorMap11", (DL_FUNC) &_RcppColors_ColorMap11, 7},
+    {"_RcppColors_ColorMap12", (DL_FUNC) &_RcppColors_ColorMap12, 7},
+    {"_RcppColors_ColorMap13", (DL_FUNC) &_RcppColors_ColorMap13, 7},
+    {"_RcppColors_ColorMap14", (DL_FUNC) &_RcppColors_ColorMap14, 7},
     {NULL, NULL, 0}
 };
 

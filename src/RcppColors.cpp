@@ -8,6 +8,7 @@ Rcpp::IntegerVector _hsluv2rgb_(double, double, double);
 std::string opacity(double);
 std::string rgb_to_hex(int, int, int);
 
+
 // [[Rcpp::export]]
 Rcpp::IntegerVector hsluv2rgb_cpp(double h, double s, double l) {
   return _hsluv2rgb_(h, s, l);
@@ -22,6 +23,18 @@ std::string hsluv_cpp(double h, double s, double l) {
 std::string hsluv_alpha_cpp(double h, double s, double l, double alpha) {
   return _hsluv2hex_(h, s, l) + opacity(alpha);
 }
+
+
+// [[Rcpp::export]]
+std::string hsl_cpp(double h, double s, double l) {
+  return RcppColors::hsl2hex(h, s, l);
+}
+
+// [[Rcpp::export]]
+std::string hsl_alpha_cpp(double h, double s, double l, double alpha) {
+  return RcppColors::hsl2hex(h, s, l) + opacity(alpha);
+}
+
 
 std::string rgb2hex(double r, double g, double b) {
   int ri = (int)round(r);
@@ -39,6 +52,11 @@ double modulo2(double a, double p) {
   double i = a > 0 ? std::floor(a / p) : std::ceil(a / p);
   return a - i * p;
 }
+
+
+/* ------------------------------------------------------------------------- */
+/* ~~~~~~ color map 1 ~~~~~~ */
+/* ------------------------------------------------------------------------- */
 
 std::string colormap1(cplx z,
                       std::string nancolor,
@@ -119,6 +137,11 @@ Rcpp::CharacterMatrix ColorMap1(Rcpp::ComplexMatrix Z,
   return P;
 }
 
+
+/* ------------------------------------------------------------------------- */
+/* ~~~~~~ color map 2 ~~~~~~ */
+/* ------------------------------------------------------------------------- */
+
 std::string colormap2(cplx z,
                       std::string nancolor,
                       bool revh,
@@ -133,7 +156,7 @@ std::string colormap2(cplx z,
   if(arg < 0) {
     arg += 2.0 * M_PI;
   }
-  double h = arg * 57.29577951308232087680; /* (180 / pi) */
+  double h = arg * 57.29577951308232087680; // (180 / pi) //
   double w = 2 * M_PI * log1p(std::abs(z));
   double s = 100.0 * sqrt((1.0 + sin(w)) / 2.0);
   double l = 100.0 * (1.0 + cos(w)) / 2.0;
@@ -270,7 +293,6 @@ Rcpp::CharacterMatrix ColorMap3(Rcpp::ComplexMatrix Z,
 }
 
 
-
 /* ------------------------------------------------------------------------- */
 /* ~~~~~~ color map 4 ~~~~~~ */
 /* ------------------------------------------------------------------------- */
@@ -301,7 +323,7 @@ std::string colormap4(cplx z,
   if(arg < 0) {
     arg += 2.0 * M_PI;
   }
-  double h = arg * 57.29577951308232087680; /* (180 / pi) */
+  double h = arg * 57.29577951308232087680; // (180 / pi) //
   double bmz = b(std::abs(z));
   double s = 100 * (1 - bmz * bmz);
   double l = 100 * (1 - (1 - bmz)*(1 - bmz));
@@ -354,6 +376,822 @@ Rcpp::CharacterMatrix ColorMap4(Rcpp::ComplexMatrix Z,
           P(i,j) = bkgcolor;
         } else {
           P(i,j) = colormap4(fromCplx(zij), nancolor, revh, revs, revl);
+        }
+      }
+    }
+  }
+  
+  return P;
+}
+
+
+// -------------------------------------------------------------------------- //
+// ~~~~~~ color map 5 ~~~~~~ //
+// -------------------------------------------------------------------------- //
+
+std::string colormap5(cplx z,
+                      std::string nancolor,
+                      bool revh,
+                      bool revs,
+                      bool revi) {
+  double x = z.real();
+  double y = z.imag();
+  if(std::isnan(x) || std::isnan(y) || std::isinf(x) || std::isinf(y)) {
+    return nancolor;
+  }
+  double arg = std::arg(z);
+  if(arg < 0) {
+    arg += M_PI;
+  }
+  double h = std::max(0.0, std::min(360.0 * arg/2/M_PI, 359.999));
+  double w = 2 * M_PI * std::log1p(fabs(arg));
+  double s = 100 * sqrt(( 1.0 + sin(w) ) / 2.0);
+  double i = 100 * ( 1.0 + cos(w) ) / 2.0;
+  if(revh) {
+    h = 360.0 - h;
+  }
+  if(revs) {
+    s = 100.0 - s;
+  }
+  if(revi) {
+    i = 100.0 - i;
+  }
+  return RcppColors::hsi2hex(h, s, i);
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterMatrix ColorMap5(Rcpp::ComplexMatrix Z,
+                                std::string bkgcolor,
+                                std::string nancolor,
+                                bool revh,
+                                bool revs,
+                                bool revi,
+                                const unsigned int nthreads) {
+  const int m = Z.nrow();
+  const int n = Z.ncol();
+  Rcpp::CharacterMatrix P(m, n);
+  
+  if(nthreads == 1) {
+    Rcpp::CharacterVector Pj(m);
+    for(int j = 0; j < n; j++) {
+      const Rcpp::ComplexVector Zj = Z(Rcpp::_, j);
+      for(int i = 0; i < m; i++) {
+        if(Rcpp::ComplexVector::is_na(Zj(i))) {
+          Pj(i) = bkgcolor;
+        } else {
+          Pj(i) = colormap5(fromCplx(Zj(i)), nancolor, revh, revs, revi);
+        }
+      }
+      P(Rcpp::_, j) = Pj;
+    }
+  } else {
+    Rcomplex zij;
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(nthreads) collapse(2) private(zij)
+#endif
+    for(int j = 0; j < n; j++) {
+      for(int i = 0; i < m; i++) {
+        zij = Z(i,j); 
+        if(Rcpp::ComplexVector::is_na(zij)) {
+          P(i,j) = bkgcolor;
+        } else {
+          P(i,j) = colormap5(fromCplx(zij), nancolor, revh, revs, revi);
+        }
+      }
+    }
+  }
+  
+  return P;
+}
+
+
+/* ------------------------------------------------------------------------- */
+/* ~~~~~~ color map 6 ~~~~~~ */
+/* ------------------------------------------------------------------------- */
+
+std::string colormap6(cplx z,
+                      std::string nancolor,
+                      bool revh,
+                      bool revs,
+                      bool revl) {
+  double x = z.real();
+  double y = z.imag();
+  if(std::isnan(x) || std::isnan(y) || std::isinf(x) || std::isinf(y)) {
+    return nancolor;
+  }
+  double arg = std::arg(z);
+  if(arg < 0) {
+    arg += 2.0 * M_PI;
+  }
+  double h = arg * 57.29577951308232087680; // (180 / pi) //
+  double w = 2 * M_PI * log1p(std::abs(z));
+  double s = 100.0 * sqrt((1.0 + sin(w)) / 2.0);
+  double l = 100.0 * (1.0 + cos(w)) / 2.0;
+  if(revh) {
+    h = 360.0 - h;
+  }
+  if(revs) {
+    s = 100.0 - s;
+  }
+  if(revl) {
+    l = 100.0 - l;
+  }
+  return RcppColors::hsl2hex(h, s, l);
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterMatrix ColorMap6(Rcpp::ComplexMatrix Z,
+                                std::string bkgcolor,
+                                std::string nancolor,
+                                bool revh,
+                                bool revs,
+                                bool revl,
+                                const unsigned int nthreads) {
+  const int m = Z.nrow();
+  const int n = Z.ncol();
+  Rcpp::CharacterMatrix P(m, n);
+  
+  if(nthreads == 1) {
+    Rcpp::CharacterVector Pj(m);
+    for(int j = 0; j < n; j++) {
+      const Rcpp::ComplexVector Zj = Z(Rcpp::_, j);
+      for(int i = 0; i < m; i++) {
+        if(Rcpp::ComplexVector::is_na(Zj(i))) {
+          Pj(i) = bkgcolor;
+        } else {
+          Pj(i) = colormap6(fromCplx(Zj(i)), nancolor, revh, revs, revl);
+        }
+      }
+      P(Rcpp::_, j) = Pj;
+    }
+  } else {
+    Rcomplex zij;
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(nthreads) collapse(2) private(zij)
+#endif
+    for(int j = 0; j < n; j++) {
+      for(int i = 0; i < m; i++) {
+        zij = Z(i,j); 
+        if(Rcpp::ComplexVector::is_na(zij)) {
+          P(i,j) = bkgcolor;
+        } else {
+          P(i,j) = colormap6(fromCplx(zij), nancolor, revh, revs, revl);
+        }
+      }
+    }
+  }
+  
+  return P;
+}
+
+
+/* ------------------------------------------------------------------------- */
+/* ~~~~~~ color map 7 ~~~~~~ */
+/* ------------------------------------------------------------------------- */
+
+std::string colormap7(cplx z,
+                      std::string nancolor,
+                      bool revh,
+                      bool revs,
+                      bool revv) {
+  double x = z.real();
+  double y = z.imag();
+  if(std::isnan(x) || std::isnan(y) || std::isinf(x) || std::isinf(y)) {
+    return nancolor;
+  }
+  double arg = std::arg(z);
+  if(arg < 0) {
+    arg += 2.0 * M_PI;
+  }
+  double h = arg * 57.29577951308232087680; // (180 / pi) //
+  double w = 2 * M_PI * log1p(std::abs(z));
+  double s = 100.0 * sqrt((1.0 + sin(w)) / 2.0);
+  double v = 100.0 * (1.0 + cos(w)) / 2.0;
+  if(revh) {
+    h = 360.0 - h;
+  }
+  if(revs) {
+    s = 100.0 - s;
+  }
+  if(revv) {
+    v = 100.0 - v;
+  }
+  return RcppColors::hsv2hex(h, s, v);
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterMatrix ColorMap7(Rcpp::ComplexMatrix Z,
+                                std::string bkgcolor,
+                                std::string nancolor,
+                                bool revh,
+                                bool revs,
+                                bool revv,
+                                const unsigned int nthreads) {
+  const int m = Z.nrow();
+  const int n = Z.ncol();
+  Rcpp::CharacterMatrix P(m, n);
+  
+  if(nthreads == 1) {
+    Rcpp::CharacterVector Pj(m);
+    for(int j = 0; j < n; j++) {
+      const Rcpp::ComplexVector Zj = Z(Rcpp::_, j);
+      for(int i = 0; i < m; i++) {
+        if(Rcpp::ComplexVector::is_na(Zj(i))) {
+          Pj(i) = bkgcolor;
+        } else {
+          Pj(i) = colormap7(fromCplx(Zj(i)), nancolor, revh, revs, revv);
+        }
+      }
+      P(Rcpp::_, j) = Pj;
+    }
+  } else {
+    Rcomplex zij;
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(nthreads) collapse(2) private(zij)
+#endif
+    for(int j = 0; j < n; j++) {
+      for(int i = 0; i < m; i++) {
+        zij = Z(i,j); 
+        if(Rcpp::ComplexVector::is_na(zij)) {
+          P(i,j) = bkgcolor;
+        } else {
+          P(i,j) = colormap7(fromCplx(zij), nancolor, revh, revs, revv);
+        }
+      }
+    }
+  }
+  
+  return P;
+}
+
+
+/* ------------------------------------------------------------------------- */
+/* ~~~~~~ color map 8 ~~~~~~ */
+/* ------------------------------------------------------------------------- */
+
+std::string colormap8(cplx z,
+                      std::string nancolor,
+                      bool revh,
+                      bool revs,
+                      bool revi) {
+  double x = z.real();
+  double y = z.imag();
+  if(std::isnan(x) || std::isnan(y) || std::isinf(x) || std::isinf(y)) {
+    return nancolor;
+  }
+  double arg = std::arg(z);
+  if(arg < 0) {
+    arg += 2.0 * M_PI;
+  }
+  double h = arg * 57.29577951308232087680; // (180 / pi) //
+  double bmz = b(std::abs(z));
+  double s = 100 * (1 - bmz * bmz);
+  double i = 100 * (1 - (1 - bmz)*(1 - bmz));
+  if(revh) {
+    h = 360.0 - h;
+  }
+  if(revs) {
+    s = 100.0 - s;
+  }
+  if(revi) {
+    i = 100.0 - i;
+  }
+  return RcppColors::hsi2hex(h, s, i);
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterMatrix ColorMap8(Rcpp::ComplexMatrix Z,
+                                std::string bkgcolor,
+                                std::string nancolor,
+                                bool revh,
+                                bool revs,
+                                bool revi,
+                                const unsigned int nthreads) {
+  const int m = Z.nrow();
+  const int n = Z.ncol();
+  Rcpp::CharacterMatrix P(m, n);
+  
+  if(nthreads == 1) {
+    Rcpp::CharacterVector Pj(m);
+    for(int j = 0; j < n; j++) {
+      const Rcpp::ComplexVector Zj = Z(Rcpp::_, j);
+      for(int i = 0; i < m; i++) {
+        if(Rcpp::ComplexVector::is_na(Zj(i))) {
+          Pj(i) = bkgcolor;
+        } else {
+          Pj(i) = colormap8(fromCplx(Zj(i)), nancolor, revh, revs, revi);
+        }
+      }
+      P(Rcpp::_, j) = Pj;
+    }
+  } else {
+    Rcomplex zij;
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(nthreads) collapse(2) private(zij)
+#endif
+    for(int j = 0; j < n; j++) {
+      for(int i = 0; i < m; i++) {
+        zij = Z(i,j); 
+        if(Rcpp::ComplexVector::is_na(zij)) {
+          P(i,j) = bkgcolor;
+        } else {
+          P(i,j) = colormap8(fromCplx(zij), nancolor, revh, revs, revi);
+        }
+      }
+    }
+  }
+  
+  return P;
+}
+
+
+/* ------------------------------------------------------------------------- */
+/* ~~~~~~ color map 9 ~~~~~~ */
+/* ------------------------------------------------------------------------- */
+
+std::string colormap9(cplx z,
+                      std::string nancolor,
+                      bool revh,
+                      bool revs,
+                      bool revl) {
+  double x = z.real();
+  double y = z.imag();
+  if(std::isnan(x) || std::isnan(y) || std::isinf(x) || std::isinf(y)) {
+    return nancolor;
+  }
+  double arg = std::arg(z);
+  if(arg < 0) {
+    arg += 2.0 * M_PI;
+  }
+  double h = arg * 57.29577951308232087680; // (180 / pi) //
+  double bmz = b(std::abs(z));
+  double s = 100 * (1 - bmz * bmz);
+  double l = 100 * (1 - (1 - bmz)*(1 - bmz));
+  if(revh) {
+    h = 360.0 - h;
+  }
+  if(revs) {
+    s = 100.0 - s;
+  }
+  if(revl) {
+    l = 100.0 - l;
+  }
+  return RcppColors::hsl2hex(h, s, l);
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterMatrix ColorMap9(Rcpp::ComplexMatrix Z,
+                                std::string bkgcolor,
+                                std::string nancolor,
+                                bool revh,
+                                bool revs,
+                                bool revl,
+                                const unsigned int nthreads) {
+  const int m = Z.nrow();
+  const int n = Z.ncol();
+  Rcpp::CharacterMatrix P(m, n);
+  
+  if(nthreads == 1) {
+    Rcpp::CharacterVector Pj(m);
+    for(int j = 0; j < n; j++) {
+      const Rcpp::ComplexVector Zj = Z(Rcpp::_, j);
+      for(int i = 0; i < m; i++) {
+        if(Rcpp::ComplexVector::is_na(Zj(i))) {
+          Pj(i) = bkgcolor;
+        } else {
+          Pj(i) = colormap9(fromCplx(Zj(i)), nancolor, revh, revs, revl);
+        }
+      }
+      P(Rcpp::_, j) = Pj;
+    }
+  } else {
+    Rcomplex zij;
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(nthreads) collapse(2) private(zij)
+#endif
+    for(int j = 0; j < n; j++) {
+      for(int i = 0; i < m; i++) {
+        zij = Z(i,j); 
+        if(Rcpp::ComplexVector::is_na(zij)) {
+          P(i,j) = bkgcolor;
+        } else {
+          P(i,j) = colormap9(fromCplx(zij), nancolor, revh, revs, revl);
+        }
+      }
+    }
+  }
+  
+  return P;
+}
+
+
+/* ------------------------------------------------------------------------- */
+/* ~~~~~~ color map 10 ~~~~~~ */
+/* ------------------------------------------------------------------------- */
+
+std::string colormap10(cplx z,
+                       std::string nancolor,
+                       bool revh,
+                       bool revs,
+                       bool revv) {
+  double x = z.real();
+  double y = z.imag();
+  if(std::isnan(x) || std::isnan(y) || std::isinf(x) || std::isinf(y)) {
+    return nancolor;
+  }
+  double arg = std::arg(z);
+  if(arg < 0) {
+    arg += 2.0 * M_PI;
+  }
+  double h = arg * 57.29577951308232087680; // (180 / pi) //
+  double bmz = b(std::abs(z));
+  double s = 100 * (1 - bmz * bmz);
+  double v = 100 * (1 - (1 - bmz)*(1 - bmz));
+  if(revh) {
+    h = 360.0 - h;
+  }
+  if(revs) {
+    s = 100.0 - s;
+  }
+  if(revv) {
+    v = 100.0 - v;
+  }
+  return RcppColors::hsv2hex(h, s, v);
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterMatrix ColorMap10(Rcpp::ComplexMatrix Z,
+                                 std::string bkgcolor,
+                                 std::string nancolor,
+                                 bool revh,
+                                 bool revs,
+                                 bool revv,
+                                const unsigned int nthreads) {
+  const int m = Z.nrow();
+  const int n = Z.ncol();
+  Rcpp::CharacterMatrix P(m, n);
+  
+  if(nthreads == 1) {
+    Rcpp::CharacterVector Pj(m);
+    for(int j = 0; j < n; j++) {
+      const Rcpp::ComplexVector Zj = Z(Rcpp::_, j);
+      for(int i = 0; i < m; i++) {
+        if(Rcpp::ComplexVector::is_na(Zj(i))) {
+          Pj(i) = bkgcolor;
+        } else {
+          Pj(i) = colormap10(fromCplx(Zj(i)), nancolor, revh, revs, revv);
+        }
+      }
+      P(Rcpp::_, j) = Pj;
+    }
+  } else {
+    Rcomplex zij;
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(nthreads) collapse(2) private(zij)
+#endif
+    for(int j = 0; j < n; j++) {
+      for(int i = 0; i < m; i++) {
+        zij = Z(i,j); 
+        if(Rcpp::ComplexVector::is_na(zij)) {
+          P(i,j) = bkgcolor;
+        } else {
+          P(i,j) = colormap10(fromCplx(zij), nancolor, revh, revs, revv);
+        }
+      }
+    }
+  }
+  
+  return P;
+}
+
+
+/* ------------------------------------------------------------------------- */
+/* ~~~~~~ color map 11 ~~~~~~ */
+/* ------------------------------------------------------------------------- */
+
+std::string colormap11(cplx z,
+                       std::string nancolor,
+                       bool revh,
+                       bool revs,
+                       bool revl) {
+  double x = z.real();
+  double y = z.imag();
+  if(std::isnan(x) || std::isnan(y) || std::isinf(x) || std::isinf(y)) {
+    return nancolor;
+  }
+  double alpha = std::arg(z);
+  double u = modulo2(std::abs(z), 1.0);
+  double v = fabs(modulo2(alpha, 0.5)) * 2.0;
+  double w = fabs(modulo2(x * y, 1));
+  if(std::isnan(w)) {
+    return nancolor;
+  }
+  double h = (1.0 - cos(u - 0.5)) * 8.0;
+  double s = (1.0 - cos(v - 0.5)) * 8.0;
+  double l = (1.0 - cos(w - 0.5)) * 8.0;
+  if(revh) {
+    h = 1.0 - h;
+  }
+  if(revs) {
+    s = 1.0 - s;
+  }
+  if(revl) {
+    l = 1.0 - l;
+  }
+  return _hsluv2hex_(h * 360.0, 
+                     s * 100.0,
+                     l * 100.0);
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterMatrix ColorMap11(Rcpp::ComplexMatrix Z,
+                                 std::string bkgcolor,
+                                 std::string nancolor,
+                                 bool revh,
+                                 bool revs,
+                                 bool revl,
+                                 const unsigned int nthreads) {
+  const int m = Z.nrow();
+  const int n = Z.ncol();
+  Rcpp::CharacterMatrix P(m, n);
+  
+  if(nthreads == 1) {
+    Rcpp::CharacterVector Pj(m);
+    for(int j = 0; j < n; j++) {
+      const Rcpp::ComplexVector Zj = Z(Rcpp::_, j);
+      for(int i = 0; i < m; i++) {
+        if(Rcpp::ComplexVector::is_na(Zj(i))) {
+          Pj(i) = bkgcolor;
+        } else {
+          Pj(i) = colormap11(fromCplx(Zj(i)), nancolor, revh, revs, revl);
+        }
+      }
+      P(Rcpp::_, j) = Pj;
+    }
+  } else {
+    Rcomplex zij;
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(nthreads) collapse(2) private(zij)
+#endif
+    for(int j = 0; j < n; j++) {
+      for(int i = 0; i < m; i++) {
+        zij = Z(i,j); 
+        if(Rcpp::ComplexVector::is_na(zij)) {
+          P(i,j) = bkgcolor;
+        } else {
+          P(i,j) = colormap11(fromCplx(zij), nancolor, revh, revs, revl);
+        }
+      }
+    }
+  }
+  
+  return P;
+}
+
+
+/* ------------------------------------------------------------------------- */
+/* ~~~~~~ color map 12 ~~~~~~ */
+/* ------------------------------------------------------------------------- */
+
+std::string colormap12(cplx z,
+                       std::string nancolor,
+                       bool revh,
+                       bool revs,
+                       bool revi) {
+  double x = z.real();
+  double y = z.imag();
+  if(std::isnan(x) || std::isnan(y) || std::isinf(x) || std::isinf(y)) {
+    return nancolor;
+  }
+  double alpha = std::arg(z);
+  double u = modulo2(std::abs(z), 1.0);
+  double v = fabs(modulo2(alpha, 0.5)) * 2.0;
+  double w = fabs(modulo2(x * y, 1));
+  if(std::isnan(w)) {
+    return nancolor;
+  }
+  double h = (1.0 - cos(u - 0.5)) * 8.0;
+  double s = (1.0 - cos(v - 0.5)) * 8.0;
+  double i = (1.0 - cos(w - 0.5)) * 8.0;
+  if(revh) {
+    h = 1.0 - h;
+  }
+  if(revs) {
+    s = 1.0 - s;
+  }
+  if(revi) {
+    i = 1.0 - i;
+  }
+  return RcppColors::hsi2hex(h * 360.0, 
+                             s * 100.0,
+                             i * 100.0);
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterMatrix ColorMap12(Rcpp::ComplexMatrix Z,
+                                 std::string bkgcolor,
+                                 std::string nancolor,
+                                 bool revh,
+                                 bool revs,
+                                 bool revi,
+                                 const unsigned int nthreads) {
+  const int m = Z.nrow();
+  const int n = Z.ncol();
+  Rcpp::CharacterMatrix P(m, n);
+  
+  if(nthreads == 1) {
+    Rcpp::CharacterVector Pj(m);
+    for(int j = 0; j < n; j++) {
+      const Rcpp::ComplexVector Zj = Z(Rcpp::_, j);
+      for(int i = 0; i < m; i++) {
+        if(Rcpp::ComplexVector::is_na(Zj(i))) {
+          Pj(i) = bkgcolor;
+        } else {
+          Pj(i) = colormap12(fromCplx(Zj(i)), nancolor, revh, revs, revi);
+        }
+      }
+      P(Rcpp::_, j) = Pj;
+    }
+  } else {
+    Rcomplex zij;
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(nthreads) collapse(2) private(zij)
+#endif
+    for(int j = 0; j < n; j++) {
+      for(int i = 0; i < m; i++) {
+        zij = Z(i,j); 
+        if(Rcpp::ComplexVector::is_na(zij)) {
+          P(i,j) = bkgcolor;
+        } else {
+          P(i,j) = colormap12(fromCplx(zij), nancolor, revh, revs, revi);
+        }
+      }
+    }
+  }
+  
+  return P;
+}
+
+
+/* ------------------------------------------------------------------------- */
+/* ~~~~~~ color map 13 ~~~~~~ */
+/* ------------------------------------------------------------------------- */
+
+std::string colormap13(cplx z,
+                       std::string nancolor,
+                       bool revh,
+                       bool revs,
+                       bool revl) {
+  double x = z.real();
+  double y = z.imag();
+  if(std::isnan(x) || std::isnan(y) || std::isinf(x) || std::isinf(y)) {
+    return nancolor;
+  }
+  double alpha = std::arg(z);
+  double u = modulo2(std::abs(z), 1.0);
+  double v = fabs(modulo2(alpha, 0.5)) * 2.0;
+  double w = fabs(modulo2(x * y, 1));
+  if(std::isnan(w)) {
+    return nancolor;
+  }
+  double h = (1.0 - cos(u - 0.5)) * 8.0;
+  double s = (1.0 - cos(v - 0.5)) * 8.0;
+  double l = (1.0 - cos(w - 0.5)) * 8.0;
+  if(revh) {
+    h = 1.0 - h;
+  }
+  if(revs) {
+    s = 1.0 - s;
+  }
+  if(revl) {
+    l = 1.0 - l;
+  }
+  return RcppColors::hsl2hex(h * 360.0, 
+                             s * 100.0,
+                             l * 100.0);
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterMatrix ColorMap13(Rcpp::ComplexMatrix Z,
+                                 std::string bkgcolor,
+                                 std::string nancolor,
+                                 bool revh,
+                                 bool revs,
+                                 bool revl,
+                                 const unsigned int nthreads) {
+  const int m = Z.nrow();
+  const int n = Z.ncol();
+  Rcpp::CharacterMatrix P(m, n);
+  
+  if(nthreads == 1) {
+    Rcpp::CharacterVector Pj(m);
+    for(int j = 0; j < n; j++) {
+      const Rcpp::ComplexVector Zj = Z(Rcpp::_, j);
+      for(int i = 0; i < m; i++) {
+        if(Rcpp::ComplexVector::is_na(Zj(i))) {
+          Pj(i) = bkgcolor;
+        } else {
+          Pj(i) = colormap13(fromCplx(Zj(i)), nancolor, revh, revs, revl);
+        }
+      }
+      P(Rcpp::_, j) = Pj;
+    }
+  } else {
+    Rcomplex zij;
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(nthreads) collapse(2) private(zij)
+#endif
+    for(int j = 0; j < n; j++) {
+      for(int i = 0; i < m; i++) {
+        zij = Z(i,j); 
+        if(Rcpp::ComplexVector::is_na(zij)) {
+          P(i,j) = bkgcolor;
+        } else {
+          P(i,j) = colormap13(fromCplx(zij), nancolor, revh, revs, revl);
+        }
+      }
+    }
+  }
+  
+  return P;
+}
+
+
+/* ------------------------------------------------------------------------- */
+/* ~~~~~~ color map 14 ~~~~~~ */
+/* ------------------------------------------------------------------------- */
+
+std::string colormap14(cplx z,
+                       std::string nancolor,
+                       bool revh,
+                       bool revs,
+                       bool revv) {
+  double x = z.real();
+  double y = z.imag();
+  if(std::isnan(x) || std::isnan(y) || std::isinf(x) || std::isinf(y)) {
+    return nancolor;
+  }
+  double alpha = std::arg(z);
+  double a = modulo2(std::abs(z), 1.0);
+  double b = fabs(modulo2(alpha, 0.5)) * 2.0;
+  double c = fabs(modulo2(x * y, 1));
+  if(std::isnan(c)) {
+    return nancolor;
+  }
+  double h = (1.0 - cos(a - 0.5)) * 8.0;
+  double s = (1.0 - cos(b - 0.5)) * 8.0;
+  double v = (1.0 - cos(c - 0.5)) * 8.0;
+  if(revh) {
+    h = 1.0 - h;
+  }
+  if(revs) {
+    s = 1.0 - s;
+  }
+  if(revv) {
+    v = 1.0 - v;
+  }
+  return RcppColors::hsv2hex(h * 360.0, 
+                             s * 100.0,
+                             v * 100.0);
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterMatrix ColorMap14(Rcpp::ComplexMatrix Z,
+                                 std::string bkgcolor,
+                                 std::string nancolor,
+                                 bool revh,
+                                 bool revs,
+                                 bool revv,
+                                 const unsigned int nthreads) {
+  const int m = Z.nrow();
+  const int n = Z.ncol();
+  Rcpp::CharacterMatrix P(m, n);
+  
+  if(nthreads == 1) {
+    Rcpp::CharacterVector Pj(m);
+    for(int j = 0; j < n; j++) {
+      const Rcpp::ComplexVector Zj = Z(Rcpp::_, j);
+      for(int i = 0; i < m; i++) {
+        if(Rcpp::ComplexVector::is_na(Zj(i))) {
+          Pj(i) = bkgcolor;
+        } else {
+          Pj(i) = colormap14(fromCplx(Zj(i)), nancolor, revh, revs, revv);
+        }
+      }
+      P(Rcpp::_, j) = Pj;
+    }
+  } else {
+    Rcomplex zij;
+#ifdef _OPENMP
+#pragma omp parallel for num_threads(nthreads) collapse(2) private(zij)
+#endif
+    for(int j = 0; j < n; j++) {
+      for(int i = 0; i < m; i++) {
+        zij = Z(i,j); 
+        if(Rcpp::ComplexVector::is_na(zij)) {
+          P(i,j) = bkgcolor;
+        } else {
+          P(i,j) = colormap14(fromCplx(zij), nancolor, revh, revs, revv);
         }
       }
     }

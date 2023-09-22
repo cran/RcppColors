@@ -23,7 +23,7 @@ isNumber <- function(x) {
 #'   of \code{Z}  
 #' @param nancolor color for infinite and \code{NaN} values 
 #' @param reverse logical vector of length three; for each component of the
-#'   color space (R, G, B or H, S, L), whether to reverse it (e.g. 
+#'   color space (e.g. R, G, B or H, S, L), whether to reverse it (e.g. 
 #'   \code{R -> 255-R})
 #' @param s saturation, a number between 0 and 100
 #' @param n number of rays drawn in a cycle; it should be a positive integer 
@@ -187,3 +187,272 @@ colorMap4 <- function(
   P
 }
 
+#' @rdname colorMaps
+#' @export
+colorMap5 <- function(
+    Z, bkgcolor = "#15191e", nancolor = "#000000", 
+    reverse = c(FALSE, FALSE, FALSE),
+    nthreads = 1L
+){
+  stopifnot(isComplex(Z))
+  stopifnot(isString(bkgcolor))
+  stopifnot(isString(nancolor))
+  stopifnot(isBooleanTriplet(reverse))
+  nthreads <- as.integer(nthreads)
+  stopifnot(nthreads >= 1L)
+  storage.mode(Z) <- "complex"
+  ismatrix <- is.matrix(Z)
+  if(!ismatrix){
+    Z <- cbind(Z)
+  }
+  P <- ColorMap5(
+    Z, bkgcolor, nancolor, reverse[1], reverse[2], reverse[3], nthreads
+  )
+  if(!ismatrix){
+    P <- c(P)
+  }
+  P
+}
+
+#' @rdname colorMaps
+#' @export
+colorMap6 <- function(
+    Z, bkgcolor = "#15191e", nancolor = "#000000", 
+    reverse = c(FALSE, FALSE, FALSE),
+    nthreads = 1L
+){
+  stopifnot(isComplex(Z))
+  stopifnot(isString(bkgcolor))
+  stopifnot(isString(nancolor))
+  stopifnot(isBooleanTriplet(reverse))
+  nthreads <- as.integer(nthreads)
+  stopifnot(nthreads >= 1L)
+  storage.mode(Z) <- "complex"
+  ismatrix <- is.matrix(Z)
+  if(!ismatrix){
+    Z <- cbind(Z)
+  }
+  P <- ColorMap6(
+    Z, bkgcolor, nancolor, reverse[1], reverse[2], reverse[3], nthreads
+  )
+  if(!ismatrix){
+    P <- c(P)
+  }
+  P
+}
+
+#' @rdname colorMaps
+#' @export
+colorMap7 <- function(
+    Z, bkgcolor = "#15191e", nancolor = "#000000", 
+    reverse = c(FALSE, FALSE, FALSE),
+    nthreads = 1L
+){
+  stopifnot(isComplex(Z))
+  stopifnot(isString(bkgcolor))
+  stopifnot(isString(nancolor))
+  stopifnot(isBooleanTriplet(reverse))
+  nthreads <- as.integer(nthreads)
+  stopifnot(nthreads >= 1L)
+  storage.mode(Z) <- "complex"
+  ismatrix <- is.matrix(Z)
+  if(!ismatrix){
+    Z <- cbind(Z)
+  }
+  P <- ColorMap7(
+    Z, bkgcolor, nancolor, reverse[1], reverse[2], reverse[3], nthreads
+  )
+  if(!ismatrix){
+    P <- c(P)
+  }
+  P
+}
+
+#' @rdname colorMaps
+#' @export
+colorMap8 <- function(
+    Z, bkgcolor = "#15191e", nancolor = "#000000", 
+    reverse = c(FALSE, FALSE, FALSE),
+    nthreads = 1L
+){
+  stopifnot(isComplex(Z))
+  stopifnot(isString(bkgcolor))
+  stopifnot(isString(nancolor))
+  stopifnot(isBooleanTriplet(reverse))
+  nthreads <- as.integer(nthreads)
+  stopifnot(nthreads >= 1L)
+  storage.mode(Z) <- "complex"
+  ismatrix <- is.matrix(Z)
+  if(!ismatrix){
+    Z <- cbind(Z)
+  }
+  P <- ColorMap8(
+    Z, bkgcolor, nancolor, reverse[1], reverse[2], reverse[3], nthreads
+  )
+  if(!ismatrix){
+    P <- c(P)
+  }
+  P
+}
+
+#' @rdname colorMaps
+#' @export
+colorMap9 <- function(
+    Z, bkgcolor = "#15191e", nancolor = "#000000", 
+    reverse = c(FALSE, FALSE, FALSE),
+    nthreads = 1L
+){
+  stopifnot(isComplex(Z))
+  stopifnot(isString(bkgcolor))
+  stopifnot(isString(nancolor))
+  stopifnot(isBooleanTriplet(reverse))
+  nthreads <- as.integer(nthreads)
+  stopifnot(nthreads >= 1L)
+  storage.mode(Z) <- "complex"
+  ismatrix <- is.matrix(Z)
+  if(!ismatrix){
+    Z <- cbind(Z)
+  }
+  P <- ColorMap9(
+    Z, bkgcolor, nancolor, reverse[1], reverse[2], reverse[3], nthreads
+  )
+  if(!ismatrix){
+    P <- c(P)
+  }
+  P
+}
+
+#' @rdname colorMaps
+#' @export
+colorMap10 <- function(
+    Z, bkgcolor = "#15191e", nancolor = "#000000", 
+    reverse = c(FALSE, FALSE, FALSE),
+    nthreads = 1L
+){
+  stopifnot(isComplex(Z))
+  stopifnot(isString(bkgcolor))
+  stopifnot(isString(nancolor))
+  stopifnot(isBooleanTriplet(reverse))
+  nthreads <- as.integer(nthreads)
+  stopifnot(nthreads >= 1L)
+  storage.mode(Z) <- "complex"
+  ismatrix <- is.matrix(Z)
+  if(!ismatrix){
+    Z <- cbind(Z)
+  }
+  P <- ColorMap10(
+    Z, bkgcolor, nancolor, reverse[1], reverse[2], reverse[3], nthreads
+  )
+  if(!ismatrix){
+    P <- c(P)
+  }
+  P
+}
+
+#' @rdname colorMaps
+#' @export
+colorMap11 <- function(
+    Z, bkgcolor = "#15191e", nancolor = "#000000", 
+    reverse = c(FALSE, FALSE, FALSE),
+    nthreads = 1L
+){
+  stopifnot(isComplex(Z))
+  stopifnot(isString(bkgcolor))
+  stopifnot(isString(nancolor))
+  stopifnot(isBooleanTriplet(reverse))
+  nthreads <- as.integer(nthreads)
+  stopifnot(nthreads >= 1L)
+  storage.mode(Z) <- "complex"
+  ismatrix <- is.matrix(Z)
+  if(!ismatrix){
+    Z <- cbind(Z)
+  }
+  P <- ColorMap11(
+    Z, bkgcolor, nancolor, reverse[1], reverse[2], reverse[3], nthreads
+  )
+  if(!ismatrix){
+    P <- c(P)
+  }
+  P
+}
+
+#' @rdname colorMaps
+#' @export
+colorMap12 <- function(
+    Z, bkgcolor = "#15191e", nancolor = "#000000", 
+    reverse = c(FALSE, FALSE, FALSE),
+    nthreads = 1L
+){
+  stopifnot(isComplex(Z))
+  stopifnot(isString(bkgcolor))
+  stopifnot(isString(nancolor))
+  stopifnot(isBooleanTriplet(reverse))
+  nthreads <- as.integer(nthreads)
+  stopifnot(nthreads >= 1L)
+  storage.mode(Z) <- "complex"
+  ismatrix <- is.matrix(Z)
+  if(!ismatrix){
+    Z <- cbind(Z)
+  }
+  P <- ColorMap12(
+    Z, bkgcolor, nancolor, reverse[1], reverse[2], reverse[3], nthreads
+  )
+  if(!ismatrix){
+    P <- c(P)
+  }
+  P
+}
+
+#' @rdname colorMaps
+#' @export
+colorMap13 <- function(
+    Z, bkgcolor = "#15191e", nancolor = "#000000", 
+    reverse = c(FALSE, FALSE, FALSE),
+    nthreads = 1L
+){
+  stopifnot(isComplex(Z))
+  stopifnot(isString(bkgcolor))
+  stopifnot(isString(nancolor))
+  stopifnot(isBooleanTriplet(reverse))
+  nthreads <- as.integer(nthreads)
+  stopifnot(nthreads >= 1L)
+  storage.mode(Z) <- "complex"
+  ismatrix <- is.matrix(Z)
+  if(!ismatrix){
+    Z <- cbind(Z)
+  }
+  P <- ColorMap13(
+    Z, bkgcolor, nancolor, reverse[1], reverse[2], reverse[3], nthreads
+  )
+  if(!ismatrix){
+    P <- c(P)
+  }
+  P
+}
+
+#' @rdname colorMaps
+#' @export
+colorMap14 <- function(
+    Z, bkgcolor = "#15191e", nancolor = "#000000", 
+    reverse = c(FALSE, FALSE, FALSE),
+    nthreads = 1L
+){
+  stopifnot(isComplex(Z))
+  stopifnot(isString(bkgcolor))
+  stopifnot(isString(nancolor))
+  stopifnot(isBooleanTriplet(reverse))
+  nthreads <- as.integer(nthreads)
+  stopifnot(nthreads >= 1L)
+  storage.mode(Z) <- "complex"
+  ismatrix <- is.matrix(Z)
+  if(!ismatrix){
+    Z <- cbind(Z)
+  }
+  P <- ColorMap14(
+    Z, bkgcolor, nancolor, reverse[1], reverse[2], reverse[3], nthreads
+  )
+  if(!ismatrix){
+    P <- c(P)
+  }
+  P
+}
