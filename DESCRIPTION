@@ -1,7 +1,7 @@
 Type: Package
 Package: RcppColors
 Title: Color Mappings and 'C++' Header Files for Color Conversion
-Version: 0.5.0
+Version: 0.6.0
 Authors@R: c(
     person("Stéphane", "Laurent", , "laurent_step@outlook.fr", role = c("cre", "aut")),
     person("Scott", "Spencer", role = "aut")
@@ -20,8 +20,8 @@ LinkingTo: Rcpp
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 NeedsCompilation: yes
-Packaged: 2023-09-22 11:44:50 UTC; SDL96354
+Packaged: 2023-10-21 00:19:16 UTC; SDL96354
 Author: Stéphane Laurent [cre, aut],
   Scott Spencer [aut]
 Repository: CRAN
-Date/Publication: 2023-09-22 17:50:02 UTC
+Date/Publication: 2023-10-21 04:10:02 UTC

@@ -26,6 +26,8 @@ h ∈ [0, 360] (hue)
 s,l,v,i ∈ [0, 100] (saturation, lightness, value, intensity)
 ```
 
+![](https://raw.githubusercontent.com/stla/RcppColors/main/inst/images/cylindricalShape_hsluv.gif)
+
 ## Usage in a package with **Rcpp**
 
 The **LinkingTo** field in the **DESCRIPTION** file should look like
@@ -345,3 +347,5 @@ ___
 ![](https://raw.githubusercontent.com/stla/RcppColors/main/inst/images/kaleidoscope.gif)
 
 ![](https://raw.githubusercontent.com/stla/jacobi/main/inst/images/KleinMoebius_cm3.gif)
+
+![](https://raw.githubusercontent.com/stla/RcppColors/main/inst/images/RogersRamanujanAltMobius.gif)
